@@ -88,3 +88,16 @@ function banner_footer () {
 	return ($ret);
 }
 
+
+function get_ticker () {
+	$q = query ("select tick from ticker");
+	if (($r = fetch ($q)) == NULL) {
+		$tick = 1;
+		query ("insert into ticker (tick) values (?)", $tick);
+	} else {
+		$tick = intval ($r->tick) + 1;
+		query ("update ticker set tick = ?", $tick);
+	}
+	do_commits ();
+	return ($tick);
+}

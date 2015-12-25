@@ -10,6 +10,11 @@ $extra_scripts .= "<script type='text/javascript' src='cast-send.js'>"
 
 pstart ();
 
+$csrf_safe = 1;
+
+$tick = get_ticker ();
+$body .= sprintf ("<div>tick = %d</div>\n", $tick);
+
 $body .= "<div>\n";
 $body .= mklink ("google cast console",
 		 "https://cast.google.com/publish/#/overview");

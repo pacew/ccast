@@ -3,6 +3,10 @@
 $anon_ok = 1;
 require_once ("common.php");
 
+$csrf_safe = 1;
+
+$tick = get_ticker ();
+
 $ret = "";
 
 $ret .= "<!DOCTYPE html>\n" 
@@ -14,7 +18,8 @@ $ret .= "<!DOCTYPE html>\n"
 	."<body>\n"
 	;
 
-$ret .= "<h1>extra stuff</h1>\n";
+$ret .= sprintf ("<h1>ticker = %d</h1>\n", $tick);
+
 $ret .= "<div id='message'>Talk to me</div>\n";
 
 
