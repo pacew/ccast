@@ -2,15 +2,23 @@ var applicationID = 'FC3FEC62';
 var namespace = 'urn:x-cast:com.google.cast.sample.helloworld';
 var session = null;
 
-if (!chrome.cast || !chrome.cast.isAvailable) {
-  setTimeout(initializeCastApi, 1000);
+if (chrome.cast && chrome.cast.isAvailable) {
+    console.log ("fast load");
+    initializeCastApi ();
+} else {
+    window['__onGCastApiAvailable'] = function(loaded, errorInfo) {
+	if (loaded) {
+	    console.log ("delayed load");
+	    initializeCastApi();
+	} else {
+	    console.log(errorInfo);
+	}
+    };
 }
 
 function initializeCastApi() {
   var sessionRequest = new chrome.cast.SessionRequest(applicationID);
-  var apiConfig = new chrome.cast.ApiConfig(sessionRequest,
-    sessionListener,
-    receiverListener);
+  var apiConfig = new chrome.cast.ApiConfig(sessionRequest, sessionListener, receiverListener);
 
   chrome.cast.initialize(apiConfig, onInitSuccess, onError);
 };
@@ -23,12 +31,14 @@ function onError(message) {
   console.log("onError: "+JSON.stringify(message));
 }
 
-function onSuccess(message) {
-  console.log("onSuccess: "+message);
-}
+function nop () { }
 
-function onStopAppSuccess() {
-  console.log('onStopAppSuccess');
+function receiverListener(e) {
+    if( e === 'available' ) {
+	console.log ("receiver found");
+    } else {
+	console.log ("receiver list empty");
+    }
 }
 
 function sessionListener(e) {
@@ -51,29 +61,25 @@ function receiverMessage(namespace, message) {
   console.log ("receiverMessage: "+namespace+", "+message);
 };
 
-function receiverListener(e) {
-  if( e === 'available' ) {
-    console.log ("receiver found");
-  }
-  else {
-    console.log ("receiver list empty");
-  }
+function stop_click() {
+    console.log ("stop");
+    session.stop(function () {console.log ("stopped");}, onError);
 }
 
-function stopApp() {
-  session.stop(onStopAppSuccess, onError);
+function sendMessage (message) {
+    if (session == null) {
+	chrome.cast.requestSession (function (e) {
+	    session = e;
+	    sendMessage2 (message);
+	});
+    } else {
+	sendMessage2 (message);
+    }
 }
 
-function sendMessage(message) {
-  if (session!=null) {
-    session.sendMessage(namespace, message, onSuccess.bind(this, "Message sent: " + message), onError);
-  }
-  else {
-    chrome.cast.requestSession(function(e) {
-        session = e;
-        session.sendMessage(namespace, message, onSuccess.bind(this, "Message sent: " + message), onError);
-      }, onError);
-  }
+function sendMessage2 (message) {
+    console.log ("sending " + message);
+    session.sendMessage(namespace, message, nop, onError);
 }
 
 function do_submit () {
@@ -83,4 +89,5 @@ function do_submit () {
 
 $(function () {
     $("#sender_form").submit(do_submit);
+    $("#stop_button").click (stop_click);
 });

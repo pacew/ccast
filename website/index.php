@@ -32,11 +32,8 @@ $body .= "<form method='get' action='#' id='sender_form'>\n";
 $body .= "<input id='sender_data' type='text' size='30' />\n";
 $body .= "</form>\n";
 
-$body .= "<div style='margin:10px;'>\n"
-	." debug output:"
-	."<textarea rows='20' cols='70' id='debugmessage'>\n"
-	."</textarea>\n"
-	."</div>\n";
+$body .= "<input id='stop_button' type='button' value='Stop' />\n";
+
 
 $body .= "</div>\n";
 
