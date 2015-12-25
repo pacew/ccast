@@ -3,6 +3,7 @@
 $anon_ok = 1;
 require_once ("common.php");
 
+
 $extra_scripts .= "<script type='text/javascript' src='cast-send.js'>"
 	."</script>\n";
 
@@ -28,7 +29,8 @@ $body .= "<input id='input' class='border' type='text'"
 	." x-webkit-speech/>\n";
 $body .= "</form>\n";
 
-$body .= "<div style='margin:10px; visibility:hidden;'>\n"
+$body .= "<div style='margin:10px;'>\n"
+	." debug output:"
 	."<textarea rows='20' cols='70' id='debugmessage'>\n"
 	."</textarea>\n"
 	."</div>\n";
