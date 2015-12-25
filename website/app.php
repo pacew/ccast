@@ -76,10 +76,14 @@ function banner_footer () {
 		."  </div>\n"
 		."</div>\n";
 
-	$ret .= "<script type='text/javascript' src='/jquery-2.1.3.min.js'>"
-		."</script>"
-		."<script type='text/javascript' src='/scripts.js'>"
-		."</script>";
+	$url="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js";
+	$ret .= sprintf ("<script src='%s'></script>\n", h($url));
+
+	$url = "//www.gstatic.com/cv/js/sender/v1/cast_sender.js";
+	$ret .= sprintf ("<script type='text/javascript' src='%s' />\n",
+			 h($url));
+	$ret .= "<script type='text/javascript' src='/scripts.js'>"
+		."</script>\n";
 
 	return ($ret);
 }

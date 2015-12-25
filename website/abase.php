@@ -369,35 +369,6 @@ function pstart_nocache () {
 
 $extra_scripts = "";
 
-function google_analytics () {
-	if (@$_SERVER['devel_mode'])
-		return ("");
-
-	$acct = ""; 
-
-	$ret = "<script type='text/javascript'>\n"
-		."var _gaq = _gaq || [];\n"
-		."_gaq.push(['_setAccount', '$acct']);\n"
-		."_gaq.push(['_setDomainName', 'none']);\n"
-		."_gaq.push(['_setAllowLinker', true]);\n"
-		."_gaq.push(['_trackPageview']);\n"
-		."(function() {\n"
-		."if (document.location.port && document.location.port != 80){"
-		."   return;"
-		."}\n"
-		."var ga = document.createElement('script');"
-		." ga.type = 'text/javascript';"
-		." ga.async = true;"
-		." ga.src = ('https:' == document.location.protocol"
-		."            ? 'https://ssl' : 'http://www')"
-		."  + '.google-analytics.com/ga.js';"
-		." var s = document.getElementsByTagName('script')[0];"
-		."  s.parentNode.insertBefore(ga, s);"
-		." })();\n"
-		." </script>\n";
-	return ($ret);
-}
-
 function pfinish () {
 	global $body;
 
