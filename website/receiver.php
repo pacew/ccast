@@ -27,7 +27,7 @@ limitations under the License.
 	    border:0px solid silver;
 	    display: table-cell;
 	    vertical-align:middle;
-	    color:#FFFFFF;
+	    color:#ff0000;
 	    background-color:#000000;
 	    font-weight:bold;
 	    font-family:Verdana, Geneva, sans-serif;
@@ -37,6 +37,7 @@ limitations under the License.
     <title>Cast Hello Text</title>
   </head>
   <body>
+extra stuff
 	<DIV id="message">Talk to me</DIV>
     <script type="text/javascript" src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>
     <script type="text/javascript">

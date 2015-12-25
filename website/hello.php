@@ -46,7 +46,8 @@ input {
 </style>
 <script type="text/javascript" src="//www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
 <script type="text/javascript">
-var applicationID = 'AC5F8298';
+var applicationID = '794B7BBF';
+applicationID = 'FC3FEC62';
 var namespace = 'urn:x-cast:com.google.cast.sample.helloworld';
 var session = null;
 

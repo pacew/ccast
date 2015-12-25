@@ -22,8 +22,7 @@ $body .= mklink ("google cast console",
 $body .= "</div>\n";
 
 $body .= "<div>\n";
-$url = sprintf ("%s/CastHelloText-chrome/receiver.html",
-		$_SERVER['ssl_url']);
+$url = sprintf ("%sreceiver.php", $_SERVER['ssl_url']);
 
 $body .= mklink ($url, $url);
 $body .= "</div>\n";
