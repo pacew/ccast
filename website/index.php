@@ -3,18 +3,11 @@
 $anon_ok = 1;
 require_once ("common.php");
 
-$extra_scripts .= "<script type='text/javascript' src='hello.js'></script>\n";
+$extra_scripts .= "<script type='text/javascript' src='cast-send.js'>"
+	."</script>\n";
 
 
 pstart ();
-
-$body .= "<div>\n";
-$body .= mklink ("google test", "/CastVideos-chrome");
-$body .= "</div>\n";
-
-$body .= "<div>\n";
-$body .= mklink ("text test", "hello.php");
-$body .= "</div>\n";
 
 $body .= "<div>\n";
 $body .= mklink ("google cast console",
