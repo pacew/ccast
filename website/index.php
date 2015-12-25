@@ -32,9 +32,16 @@ $body .= "</div>\n";
 $body .= "<div>\n";
 $body .= "<form method='get' action='JavaScript:update();'>\n";
 $body .= "<input id='input' class='border' type='text'"
-	."  size='30' onwebkitspeechchange='transcribe(this.value)'"
-	."  x-webkit-speech/>\n";
+	." size='30' onwebkitspeechchange='transcribe(this.value)'"
+	." x-webkit-speech/>\n";
 $body .= "</form>\n";
+
+$body .= "<div style='margin:10px; visibility:hidden;'>\n"
+	."<textarea rows='20' cols='70' id='debugmessage'>\n"
+	."</textarea>\n"
+	."</div>\n";
+
+$body .= "</div>\n";
 
 pfinish ();
 
