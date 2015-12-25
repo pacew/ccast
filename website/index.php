@@ -28,10 +28,8 @@ $body .= "</div>\n";
 
 
 $body .= "<div>\n";
-$body .= "<form method='get' action='JavaScript:update();'>\n";
-$body .= "<input id='input' class='border' type='text'"
-	." size='30' onwebkitspeechchange='transcribe(this.value)'"
-	." x-webkit-speech/>\n";
+$body .= "<form method='get' action='#' id='sender_form'>\n";
+$body .= "<input id='sender_data' type='text' size='30' />\n";
 $body .= "</form>\n";
 
 $body .= "<div style='margin:10px;'>\n"
