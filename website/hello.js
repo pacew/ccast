@@ -1,6 +1,4 @@
-var applicationID = '794B7BBF';
-if (1)
-  applicationID = 'AC5F8298'; /* pace */
+var applicationID = 'FC3FEC62';
 var namespace = 'urn:x-cast:com.google.cast.sample.helloworld';
 var session = null;
 
