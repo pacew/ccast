@@ -42,8 +42,8 @@ $tick = get_ticker ();
 $body .= sprintf ("<div>tick = %d</div>\n", $tick);
 
 $body .= "<div>\n";
-$body .= mklink ("google cast console",
-		 "https://cast.google.com/publish/#/overview");
+$body .= mklink_nw ("google cast console",
+		    "https://cast.google.com/publish/#/overview");
 $body .= "</div>\n";
 
 $body .= "<div>\n";
