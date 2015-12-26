@@ -1,4 +1,9 @@
-var applicationID = 'FC3FEC62';
+if (window.sender_args == null || sender_args['cast_app_id'] == null) {
+    console.log ("sender_args not set");
+}
+
+var applicationID = sender_args['cast_app_id'];
+console.log (applicationID);
 var namespace = 'urn:x-cast:com.google.cast.sample.helloworld';
 var session = null;
 
