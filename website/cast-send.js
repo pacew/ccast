@@ -58,8 +58,31 @@ function sessionUpdateListener(isAlive) {
 };
 
 function receiverMessage(namespace, message) {
-  console.log ("receiverMessage: "+namespace+", "+message);
+    console.log ("receiverMessage: "+namespace+", "+message);
+    try {
+	var msg = JSON.parse (message);
+	console.log (msg);
+	if (msg)
+	    do_msg (msg);
+    } catch (e) {
+	console.log (["json parse error", e]);
+    }
 };
+
+var receiver_ipaddr;
+
+function do_msg (msg) {
+    console.log (["do_msg", msg]);
+
+    if (msg.op == "receiver_ipaddr") {
+	receiver_ipaddr = msg.ipaddr;
+	var url = "http://" + receiver_ipaddr + ":9222";
+	console.log ("receiver_ipaddr " + url);
+	$("#receiver_console_link").attr ("href", url);
+	$("#receiver_console_link").html(url);
+
+    }
+}
 
 function stop_click() {
     console.log ("stop");

@@ -22,10 +22,8 @@ $body .= "</div>\n";
 
 $body .= "<div>\n";
 $url = sprintf ("%sreceiver.php", $_SERVER['ssl_url']);
-
 $body .= mklink ($url, $url);
 $body .= "</div>\n";
-
 
 $body .= "<div>\n";
 $body .= "<form method='get' action='#' id='sender_form'>\n";
@@ -35,6 +33,11 @@ $body .= "</form>\n";
 $body .= "<input id='stop_button' type='button' value='Stop' />\n";
 
 
+$body .= "</div>\n";
+
+$body .= "<div>\n";
+$body .= "<a id='receiver_console_link' href='#' target='_blank'>"
+	." receiver console</a>\n";
 $body .= "</div>\n";
 
 pfinish ();

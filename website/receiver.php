@@ -20,6 +20,11 @@ $ret .= "<!DOCTYPE html>\n"
 
 $ret .= sprintf ("<h1>ticker = %d</h1>\n", $tick);
 
+//$ret .= "<iframe width='640' height='480' src='https://example.com'></iframe>\n";
+//$ret .= "<iframe width='640' height='480' src='https://k.pacew.org:10898/rollaball.html'></iframe>\n";
+
+
+
 $ret .= "<div id='message'>Talk to me</div>\n";
 
 

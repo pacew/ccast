@@ -1,3 +1,5 @@
+var last_sender_id;
+
 window.onload = function() {
     cast.receiver.logger.setLevelValue(0);
     window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
@@ -36,6 +38,7 @@ window.onload = function() {
     
     // handler for the CastMessageBus message event
     window.messageBus.onMessage = function(event) {
+	last_sender_id = event.senderId;
         console.log('Message [' + event.senderId + ']: ' + event.data);
         // display the message from the sender
         displayText(event.data);
@@ -54,6 +57,7 @@ function displayText(text) {
     console.log(text);
     document.getElementById("message").innerHTML=text;
     window.castReceiverManager.setApplicationState(text);
+    get_my_ip_addr ();
 };
 
 /* http://stackoverflow.com/questions/20194722/can-you-get-a-users-local-lan-ip-address-via-javascript */
@@ -69,8 +73,16 @@ function get_my_ip_addr () {
     pc.createOffer(pc.setLocalDescription.bind(pc), noop);    
     pc.onicecandidate = function(ice){  //listen for candidate events
 	if(!ice || !ice.candidate || !ice.candidate.candidate)  return;
+	console.log (ice.candidate.candidate);
 	var myIP = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(ice.candidate.candidate)[1];
 	console.log('my IP: ', myIP);   
+	console.log(["last sender id", last_sender_id]);
+	if (last_sender_id) {
+	    var msg = {};
+	    msg.op = "receiver_ipaddr";
+	    msg.ipaddr = myIP;
+            window.messageBus.send(last_sender_id, JSON.stringify (msg));
+	}
 	pc.onicecandidate = noop;
     };
 }
