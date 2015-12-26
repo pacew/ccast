@@ -9,6 +9,9 @@ $app_db = array ();
 $app_db['https://k.pacew.org:10898/receiver.php'] =
 	array ("pace.willisson@gmail.com", "FC3FEC62");
 
+$app_db['https://k.pacew.org:7884/receiver.php'] =
+	array ("pace.willisson@gmail.com", "C116E951");
+
 pstart ();
 $csrf_safe = 1;
 
