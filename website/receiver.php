@@ -35,6 +35,9 @@ $ret .= "<script type='text/javascript' src='//ajax.googleapis.com/ajax/libs/jqu
 $ret .= "<script type='text/javascript' src='receiver.js'></script>\n";
 $ret .= "<script type='text/javascript' src='jrconsole.js'></script>\n";
 
+$ret .= "<script type='text/javascript' src='rapp.js'></script>\n";
+
+
 $ret .= "</body>\n"
 	."</html>\n";
 

@@ -124,8 +124,18 @@ function reload_receiver_click () {
     sendMessage (msg);
 }
 
+function game_left_click () {
+    console.log ("game left click");
+    var msg = {
+	"op": "game",
+	"val": "left"
+    };
+    sendMessage (msg);
+}
+
 $(function () {
     $("#sender_form").submit(do_submit);
     $("#stop_button").click (stop_click);
     $("#reload_receiver_button").click (reload_receiver_click);
+    $("#game_left_button").click (game_left_click);
 });

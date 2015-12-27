@@ -54,6 +54,9 @@ window.onload = function() {
 	} else if (msg.op == "reload_receiver") {
 	    console.log ("reload_receiver");
 	    window.location = window.location.href;
+	} else if (msg.op == "game") {
+	    console.log ("game msg");
+	    rapp_rcv_msg (msg);
 	}
     };
 
