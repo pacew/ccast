@@ -39,13 +39,23 @@ window.onload = function() {
     // handler for the CastMessageBus message event
     window.messageBus.onMessage = function(event) {
 	last_sender_id = event.senderId;
-        console.log('Message [' + event.senderId + ']: ' + event.data);
-        // display the message from the sender
-        displayText(event.data);
-        // inform all senders on the CastMessageBus of the incoming message event
-        // sender message listener will be invoked
-        window.messageBus.send(event.senderId, event.data);
-    }
+	var msg_str = event.data;
+	console.log (msg_str);
+	var msg = null;
+	try {
+	    msg = JSON.parse (msg_str);
+	} catch (e) {
+	    console.log (["rcv parse error", e]);
+	}
+
+	if (msg.op == "set_text") {
+            displayText(msg.val);
+            window.messageBus.send(event.senderId, msg.val);
+	} else if (msg.op == "reload_receiver") {
+	    console.log ("reload_receiver");
+	    window.location = window.location.href;
+	}
+    };
 
     // initialize the CastReceiverManager with an application status message
     window.castReceiverManager.start({statusText: "Application is starting"});

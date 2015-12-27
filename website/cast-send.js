@@ -94,14 +94,14 @@ function stop_click() {
     session.stop(function () {console.log ("stopped");}, onError);
 }
 
-function sendMessage (message) {
+function sendMessage (msg) {
     if (session == null) {
 	chrome.cast.requestSession (function (e) {
 	    session = e;
-	    sendMessage2 (message);
+	    sendMessage2 (JSON.stringify (msg));
 	});
     } else {
-	sendMessage2 (message);
+	sendMessage2 (JSON.stringify (msg));
     }
 }
 
@@ -111,11 +111,21 @@ function sendMessage2 (message) {
 }
 
 function do_submit () {
-    var val = $("#sender_data").val();
-    sendMessage (val);
+    var msg = {
+	"op": "set_text",
+	"val": $("#sender_data").val()
+    };
+    sendMessage (msg);
+}
+
+function reload_receiver_click () {
+    console.log ("reload receiver");
+    var msg = { "op": "reload_receiver" };
+    sendMessage (msg);
 }
 
 $(function () {
     $("#sender_form").submit(do_submit);
     $("#stop_button").click (stop_click);
+    $("#reload_receiver_button").click (reload_receiver_click);
 });
