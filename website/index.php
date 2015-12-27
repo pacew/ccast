@@ -12,6 +12,12 @@ $app_db['https://k.pacew.org:10898/receiver.php'] =
 $app_db['https://k.pacew.org:7884/receiver.php'] =
 	array ("pace.willisson@gmail.com", "C116E951");
 
+$app_db['https://k.pacew.org:7882/receiver.php'] =
+	array ("ericwillisson@gmail.com", "1FC4F174");
+
+$app_db['http://k.pacew.org:7883/receiver.php'] =
+	array ("ericwillisson@gmail.com", "A7CE4000");
+
 pstart ();
 $csrf_safe = 1;
 
@@ -43,7 +49,7 @@ $body .= sprintf ("<div>tick = %d</div>\n", $tick);
 
 $body .= "<div>\n";
 $body .= mklink_nw ("google cast console",
-		    "https://cast.google.com/publish/#/overview");
+		 "https://cast.google.com/publish/#/overview");
 $body .= "</div>\n";
 
 $body .= "<div>\n";
