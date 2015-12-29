@@ -65,10 +65,14 @@ $body .= "<input id='stop_button' type='button' value='Stop' />\n";
 
 $body .= "<input id='reload_receiver_button' type='button'"
 	." value='Reload receiver' />\n";
+$body .= "<input id='reconnect_button' type='button'"
+	." value='Reconnect to jrconsole' />\n";
 
-$body .= "<input id='game_left_button' type='button'"
-	." value='left' />\n";
-
+$body .= "<input id='game_up_button' type='button'"
+	." value='up' />\n";
+$body .= "<input id='game_down_button' type='button'"
+	." value='down' />\n";
+$body .= "<div id='mousectl'></div>\n";
 
 $body .= "</div>\n";
 

@@ -123,12 +123,40 @@ function reload_receiver_click () {
     var msg = { "op": "reload_receiver" };
     sendMessage (msg);
 }
-
-function game_left_click () {
-    console.log ("game left click");
+function reconnect_click () {
+    console.log ("reconnect");
     var msg = {
 	"op": "game",
-	"val": "left"
+	"val": "reconnect"
+    };
+    sendMessage (msg);
+}
+
+function game_up_click () {
+    console.log ("game up click");
+    var msg = {
+	"op": "game",
+	"val": "up"
+    };
+    sendMessage (msg);
+}
+
+
+function game_down_click () {
+    console.log ("game down click");
+    var msg = {
+	"op": "game",
+	"val": "down"
+    };
+    sendMessage (msg);
+}
+
+function game_mouse_control (e) {
+    var msg = {
+	"op": "game",
+	"val": "mousemove",
+	"xpos": e.offsetX / $("#mousectl").width(),
+	"ypos": e.offsetY / $("#mousectl").height()
     };
     sendMessage (msg);
 }
@@ -137,5 +165,8 @@ $(function () {
     $("#sender_form").submit(do_submit);
     $("#stop_button").click (stop_click);
     $("#reload_receiver_button").click (reload_receiver_click);
-    $("#game_left_button").click (game_left_click);
+    $("#reconnect_button").click (reconnect_click);
+    $("#game_up_button").click (game_up_click);
+    $("#game_down_button").click (game_down_click);
+    $("#mousectl").mousemove(game_mouse_control);
 });

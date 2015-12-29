@@ -32,6 +32,9 @@ $url = "//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js";
 $ret .= sprintf ("<script type='text/javascript' src='%s'></script>\n", h($url));
 
 $ret .= "<script type='text/javascript' src='//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js'></script>\n";
+$ret .= "<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r73/three.min.js'></script>\n";
+$ret .= "<script type='text/javascript' src='renderers/Projector.js'></script>\n";
+$ret .= "<script type='text/javascript' src='renderers/CanvasRenderer.js'></script>\n";
 $ret .= "<script type='text/javascript' src='receiver.js'></script>\n";
 $ret .= "<script type='text/javascript' src='jrconsole.js'></script>\n";
 
