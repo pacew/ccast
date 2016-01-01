@@ -2,4 +2,6 @@ TMP.*
 ?
 *~
 *.pyc
+*.o
+wss
 config.py
