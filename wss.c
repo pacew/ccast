@@ -9,6 +9,7 @@
 #include <libwebsockets.h>
 
 int wss_port;
+char *key_file, *crt_file, *chain_file;
 
 void
 usage (void)
@@ -17,35 +18,50 @@ usage (void)
 	exit (1);
 }
 
-int
-find_wss_port (void)
+void
+read_conf (void)
 {
 	FILE *f;
 	char buf[1000];
+	char op[1000], op2[1000];
+	int idx;
+	char *val;
 	char *p;
-	int port;
 
 	if ((f = fopen ("TMP.conf", "r")) == NULL)
-		return (-1);
+		return;
 
 	while (fgets (buf, sizeof buf, f) != NULL) {
-		p = buf;
-		while (*p && strncmp (p, "wss_port", 8) != 0)
-			p++;
-
-		if (*p == 0)
+		if (sscanf (buf, "%s %n", op, &idx) != 1)
 			continue;
-		
-		while (*p && ! isdigit (*p))
-			p++;
+		val = buf + idx;
+		while (isspace (*val))
+			val++;
+		idx = strlen (val);
+		while (idx > 0 && isspace (val[idx - 1]))
+			val[--idx] = 0;
 
-		port = atoi (p);
-		if (port)
-			return (port);
+		if (strcmp (op, "SetEnv") == 0) {
+			if (sscanf (val, "%s %n", op2, &idx) != 1)
+				continue;
+			val += idx;
+			printf ("%s : %s\n", op2, val);
+			if (strcmp (op2, "wss_port") == 0) {
+				p = val;
+				while (*p && ! isdigit (*p))
+					p++;
+				wss_port = atoi (p);
+			}
+		} else if (strcmp (op, "SSLCertificateKeyFile") == 0) {
+			key_file = strdup (val);
+		} else if (strcmp (op, "SSLCertificateFile") == 0) {
+			crt_file = strdup (val);
+		} else if (strcmp (op, "SSLCertificateChainFile") == 0) {
+			chain_file = strdup (val);
+		}
 	}
 
 	fclose (f);
-	return (-1);
 }
 
 struct work {
@@ -214,18 +230,55 @@ void
 socket_setup (void)
 {
 	struct lws_context_creation_info info;
+	char fname[1000];
+	int fd;
+	FILE *inf, *outf;
+	int c;
+	int lastc;
 
 	memset (&info, 0, sizeof info);
 	info.port = wss_port;
 	info.protocols = protocols;
 	info.uid = -1;
 	info.gid = -1;
-	if (0) {
-		info.ssl_cert_filepath = "crt";
-		info.ssl_private_key_filepath
-			= "/etc/apache2/wildcard.pacew.org.key";
-	}
 
+
+	if (crt_file && key_file && chain_file) {
+		strcpy (fname, "/tmp/crt.XXXXXX");
+		if ((fd = mkstemp (fname)) < 0) {
+			fprintf (stderr, "can't create tmp file %s\n", fname);
+			exit (1);
+		}
+		outf = fdopen (fd, "w");
+
+		if ((inf = fopen (crt_file, "r")) == NULL) {
+			fprintf (stderr, "can't open %s\n", crt_file);
+			exit (1);
+		}
+		lastc = 0;
+		while ((c = getc (inf)) != EOF) {
+			putc (c, outf);
+			lastc = c;
+		}
+		fclose (inf);
+
+		if (lastc != '\n')
+			putc ('\n', outf);
+		
+		if ((inf = fopen (chain_file, "r")) == NULL) {
+			fprintf (stderr, "can't open %s\n", chain_file);
+			exit (1);
+		}
+		while ((c = getc (inf)) != EOF)
+			putc (c, outf);
+		fclose (inf);
+
+		fclose (outf);
+
+		info.ssl_cert_filepath = fname;
+		info.ssl_private_key_filepath = key_file;
+	}
+	
 	context = lws_create_context (&info);
 }
 
@@ -281,7 +334,9 @@ main (int argc, char **argv)
 	wp->callback = work_stdin;
 	fcntl (0, F_SETFL, O_NONBLOCK);
 
-	if ((wss_port = find_wss_port ()) < 0) {
+	read_conf ();
+
+	if (wss_port == 0) {
 		printf ("can't find wss_port\n");
 		exit (1);
 	}
