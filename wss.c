@@ -112,7 +112,10 @@ callback_http (struct lws *wsi,
 	struct work *wp;
 	struct lws_pollargs *pollargs;
 	char *url;
+	unsigned char obuf[LWS_SEND_BUFFER_PRE_PADDING + 1000];
+	unsigned char *ubuf, *p, *end;
 
+	printf ("callback %d\n", reason);
 	switch (reason) {
 	case LWS_CALLBACK_PROTOCOL_INIT:
 		printf ("cb: protocol init (%p %p %p %ld)\n",
@@ -124,18 +127,61 @@ callback_http (struct lws *wsi,
 			wsi, user, in, len);
 		url = in;
 		printf ("url = %s\n", url);
-		return (1);
+
+		end = obuf + sizeof obuf;
+		ubuf = obuf + LWS_SEND_BUFFER_PRE_PADDING;
+		p = ubuf;
+		if (lws_add_http_header_status (wsi, 200, &p, end))
+			return (1);
+
+		if (lws_add_http_header_content_length (wsi, 3, &p, end))
+			return (1);
+
+		if (lws_finalize_http_header (wsi, &p, end))
+			return (1);
+
+		if (lws_write (wsi, ubuf, p - ubuf, LWS_WRITE_HTTP_HEADERS) < 0)
+			return (-1);
+
+		lws_callback_on_writable (wsi);
+
+		break;
+
+	case LWS_CALLBACK_HTTP_WRITEABLE:
+		printf ("writable: write 3\n");
+		end = obuf + sizeof obuf;
+		ubuf = obuf + LWS_SEND_BUFFER_PRE_PADDING;
+		p = ubuf;
+		strcpy ((char *)p, "foo");
+		p += 3;
+		lws_write (wsi, ubuf, p - ubuf, LWS_WRITE_HTTP);
+		return (0);
 
 	case LWS_CALLBACK_ADD_POLL_FD:
 		pollargs = in;
+		printf ("poll add %d\n", pollargs->fd);
 		wp = add_work (pollargs->fd, pollargs->events);
 		break;
 
 	case LWS_CALLBACK_DEL_POLL_FD:
 		pollargs = in;
+		printf ("poll delete %d\n", pollargs->fd);
 		if ((wp = find_work (pollargs->fd)) != NULL)
 			delete_work (wp);
 		break;
+
+	case LWS_CALLBACK_CHANGE_MODE_POLL_FD:
+		pollargs = in;
+		if ((wp = find_work (pollargs->fd)) != NULL) {
+			printf ("sock %d: change events from 0x%x to 0x%x\n",
+				wp->fd, wp->events, pollargs->events);
+			wp->events = pollargs->events;
+		}
+		break;
+
+	case LWS_CALLBACK_PROTOCOL_DESTROY:
+		printf ("protocol destroy\n");
+		exit (1);
 
 	case LWS_CALLBACK_LOCK_POLL:
 	case LWS_CALLBACK_UNLOCK_POLL:
@@ -174,6 +220,11 @@ socket_setup (void)
 	info.protocols = protocols;
 	info.uid = -1;
 	info.gid = -1;
+	if (0) {
+		info.ssl_cert_filepath = "crt";
+		info.ssl_private_key_filepath
+			= "/etc/apache2/wildcard.pacew.org.key";
+	}
 
 	context = lws_create_context (&info);
 }
@@ -206,9 +257,13 @@ main (int argc, char **argv)
 	struct work *wp;
 	struct pollfd *pf;
 	int timeout_msecs;
+	int debug_level = 7;
 
-	while ((c = getopt (argc, argv, "")) != EOF) {
+	while ((c = getopt (argc, argv, "d:")) != EOF) {
 		switch (c) {
+		case 'd':
+			debug_level = atoi (optarg);
+			break;
 		default:
 			usage ();
 		}
@@ -216,6 +271,8 @@ main (int argc, char **argv)
 
 	if (optind != argc)
 		usage ();
+
+	lws_set_log_level(debug_level, NULL);
 
 	work_head.next = &work_head;
 	work_head.prev = &work_head;
