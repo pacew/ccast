@@ -88,9 +88,15 @@ $sender_args['cast_app_id'] = $app_info[1];
 $extra_scripts .= "<script type='text/javascript'>\n";
 $extra_scripts .= sprintf ("var sender_args = %s;\n",
 			   json_encode ($sender_args));
+$extra_scripts .= sprintf ("var wss_url = %s;\n",
+			   json_encode ($_SERVER['wss_url']));
 $extra_scripts .= "</script>\n";
 
 $extra_scripts .= "<script type='text/javascript' src='cast-send.js'>"
+	."</script>\n";
+
+
+$extra_scripts .= "<script type='text/javascript' src='wsclient.js' >"
 	."</script>\n";
 
 

@@ -220,8 +220,34 @@ callback_http (struct lws *wsi,
 }
 
 
+int
+callback_ccast (struct lws *wsi,
+		enum lws_callback_reasons reason,
+		void *user,
+		void *in, size_t len)
+{
+	switch (reason) {
+	case LWS_CALLBACK_RECEIVE:
+		printf ("ccast receive: %p %d\n", in, (int)len);
+		return (1);
+
+	case LWS_CALLBACK_PROTOCOL_INIT:
+	case LWS_CALLBACK_FILTER_PROTOCOL_CONNECTION:
+	case LWS_CALLBACK_ESTABLISHED:
+		return (0);
+	default:
+		break;
+	}
+
+	printf ("callback ccast: %d\n", reason);
+	exit (1);
+}
+
+
 struct lws_protocols protocols[] = {
 	{ "http", callback_http },
+	{ "ccast", callback_ccast },
+	{ NULL },
 };
 
 struct lws_context *context;
