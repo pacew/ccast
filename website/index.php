@@ -18,6 +18,9 @@ $app_db['https://k.pacew.org:7882/receiver.php'] =
 $app_db['http://k.pacew.org:7883/receiver.php'] =
 	array ("ericwillisson@gmail.com", "A7CE4000");
 
+$app_db['https://d6.pacew.org:7884/receiver.php'] =
+	array ("pace.willisson@gmail.com", "1BF75029");
+
 pstart ();
 $csrf_safe = 1;
 

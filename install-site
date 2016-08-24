@@ -8,9 +8,19 @@ $args = array ();
 $config = slimstk_install_site ($args);
 
 $ssl_files = find_ssl_files ($config['url_name']);
+foreach (explode (" ", $ssl_files) as $token) {
+	$token = trim ($token);
+	if (preg_match ('/key$/', $token)) {
+		$key = $token;
+	} else if (preg_match ('/crt$/', $token)) {
+		$crt = $token;
+	} else if (preg_match ('/pem$/', $token)) {
+		$pem = $token;
+	}
+}
 
 $config_file = fopen ("config.py", "w");
-fwrite ($config_file, "keyfile = \"$ssl_files[0]\"\n");
-fwrite ($config_file, "crt = \"$ssl_files[1]\"\n");
-fwrite ($config_file, "pem = \"$ssl_files[2]\"\n");
+fprintf ($config_file, "keyfile = \"%s\"\n", $key);
+fprintf ($config_file, "crt = \"%s\"\n", $crt);
+fprintf ($config_file, "pem = \"%s\"\n", $pem);
 fclose ($config_file);
